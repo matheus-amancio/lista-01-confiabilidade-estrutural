@@ -94,6 +94,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#item-b" id="toc-item-b" class="nav-link" data-scroll-target="#item-b"><span class="header-section-number">2</span> Item b)</a>
   <ul class="collapse">
   <li><a href="#modelo-gaussiano" id="toc-modelo-gaussiano" class="nav-link" data-scroll-target="#modelo-gaussiano"><span class="header-section-number">2.1</span> Modelo Gaussiano</a></li>
+  <li><a href="#distribuição-de-gumbel-inclinada-para-a-esquerda" id="toc-distribuição-de-gumbel-inclinada-para-a-esquerda" class="nav-link" data-scroll-target="#distribuição-de-gumbel-inclinada-para-a-esquerda"><span class="header-section-number">2.2</span> Distribuição de Gumbel (inclinada para a esquerda)</a></li>
+  <li><a href="#teste-de-hipótese" id="toc-teste-de-hipótese" class="nav-link" data-scroll-target="#teste-de-hipótese"><span class="header-section-number">2.3</span> Teste de hipótese</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -119,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">9 de novembro de 2023</p>
+      <p class="date">16 de novembro de 2023</p>
     </div>
   </div>
   
@@ -142,12 +144,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Optou-se por trabalhar com os dados somente do Brasil, no período de 1970 à 2019. Sendo assim, antes de calcular os parâmetros e gerar os gráficos para caracterização da amostra, é necessário filtrar os dados obtidos.</p>
 <p>Neste item, utilizou-se a linguagem de programação <a href="https://www.python.org/">Python</a> e para efetuar a leitura e filtragem dos dados utilizou-se a famosa biblioteca <a href="https://pandas.pydata.org/">Pandas</a>.</p>
 <p>A leitura dos dados do arquivo <code>lex.csv</code> é feita pelo trecho do código abaixo.</p>
-<div class="cell" data-execution_count="258">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"lex.csv"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="258">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -451,7 +453,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Como foi dito acima, trabalharemos com os dados somente do Brasil, no período de 1970 a 2019. No trecho de código abaixo são apresentadas as instruções para as filtragens necessárias e também manipulações com as estruturas de dados da biblioteca <code>pandas</code> para facilitar os trabalhos posteriores. Após o trecho de código, uma tabela com os dados filtrados é apresentada.</p>
-<div class="cell" data-execution_count="259">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>START_YEAR <span class="op">=</span> <span class="dv">1970</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>END_YEAR <span class="op">=</span> <span class="dv">2019</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -468,7 +470,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy.index.names <span class="op">=</span> [<span class="st">"Year"</span>]</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy <span class="op">=</span> df_brazil_life_expectancy.loc[START_YEAR:END_YEAR]</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="259">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -700,10 +702,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 \bar{x} = \dfrac{1}{n} \sum_{i=1}^{n} x_{i}
 \tag{1}\]</span></span></p>
 <p>No trecho de código abaixo é apresentada uma possível implementação para obter a média dos dados selecionados.</p>
-<div class="cell" data-execution_count="260">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].<span class="bu">sum</span>() <span class="op">/</span> <span class="bu">len</span>(df_brazil_life_expectancy)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mean</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="260">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>68.12200000000001</code></pre>
 </div>
 </div>
@@ -716,12 +718,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 s^{2} = \dfrac{1}{n-1} \sum_{i=1}^{n} \left ( x_{i} - \bar{x} \right)^{2}
 \tag{2}\]</span></span></p>
 <p>No trecho de código abaixo é apresentada uma possível implementação para obter a variância da amostra.</p>
-<div class="cell" data-execution_count="261">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>variance <span class="op">=</span> df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].<span class="bu">apply</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x: (x <span class="op">-</span> mean) <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>).<span class="bu">sum</span>() <span class="op">/</span> (<span class="bu">len</span>(df_brazil_life_expectancy) <span class="op">-</span> <span class="dv">1</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>variance</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="261">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>32.15522040816326</code></pre>
 </div>
 </div>
@@ -734,10 +736,10 @@ s^{2} = \dfrac{1}{n-1} \sum_{i=1}^{n} \left ( x_{i} - \bar{x} \right)^{2}
 s = \sqrt{\dfrac{1}{n-1} \sum_{i=1}^{n} \left ( x_{i} - \bar{x} \right)^{2}}
 \tag{3}\]</span></span></p>
 <p>Calculando o desvio padrão</p>
-<div class="cell" data-execution_count="262">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>standard_deviation <span class="op">=</span> variance <span class="op">**</span> <span class="fl">0.5</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>standard_deviation</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="262">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>5.670557327826186</code></pre>
 </div>
 </div>
@@ -749,10 +751,10 @@ s = \sqrt{\dfrac{1}{n-1} \sum_{i=1}^{n} \left ( x_{i} - \bar{x} \right)^{2}}
 <p><span id="eq-cov"><span class="math display">\[
 COV = \dfrac{s}{\bar{x}}
 \tag{4}\]</span></span></p>
-<div class="cell" data-execution_count="263">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>COV <span class="op">=</span> standard_deviation <span class="op">/</span> mean</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>COV</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="263">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>0.0832412044247994</code></pre>
 </div>
 </div>
@@ -761,10 +763,10 @@ COV = \dfrac{s}{\bar{x}}
 <section id="máximo-e-mínimo" class="level4" data-number="1.2.5">
 <h4 data-number="1.2.5" class="anchored" data-anchor-id="máximo-e-mínimo"><span class="header-section-number">1.2.5</span> Máximo e mínimo</h4>
 <p>Os anos em que se observaram as máximas e mínimas expectativas de vida são facilmente obtidos com a biblioteca <code>pandas</code>, conforme é mostrado abaixo.</p>
-<div class="cell" data-execution_count="264">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>max_expectancy <span class="op">=</span> df_brazil_life_expectancy[df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>]<span class="op">==</span>df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].<span class="bu">max</span>()]</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>max_expectancy</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="264">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -790,10 +792,10 @@ COV = \dfrac{s}{\bar{x}}
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="265">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>min_expectancy <span class="op">=</span> df_brazil_life_expectancy[df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>]<span class="op">==</span>df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].<span class="bu">min</span>()]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>min_expectancy</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="265">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -822,11 +824,11 @@ COV = \dfrac{s}{\bar{x}}
 </section>
 <section id="quantis" class="level4" data-number="1.2.6">
 <h4 data-number="1.2.6" class="anchored" data-anchor-id="quantis"><span class="header-section-number">1.2.6</span> Quantis</h4>
-<p>Os quantis pontos que dividem os dados ordenados em subconjuntos de dados de dimensão igual.</p>
+<p>Os quantis são pontos que dividem os dados ordenados em subconjuntos de dados de dimensão igual.</p>
 <p>Alguns quantis específicos são denominados de forma especial, como os 100-quantis, conhecidos como <strong>percentis</strong>.</p>
 <p>Os percentis 25, 50 e 75 são chamados <strong>quartis</strong> e o percentil 50 é também conhecido como a <strong>mediana</strong> da amostra.</p>
 <p>Para obter, por exemplo, a mediana, primeiramente é necessário ordenar os dados. Se a quantidade de dados for ímpar, o valor central é a própria mediana, senão, a mediana é a média dos dois valores centrais. O trecho de código abaixo calcula a mediana da amostra.</p>
-<div class="cell" data-execution_count="266">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_median(data: pd.Series):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> data.sort_values()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(data)</span>
@@ -836,34 +838,34 @@ COV = \dfrac{s}{\bar{x}}
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> data.iloc[n <span class="op">//</span> <span class="dv">2</span>]</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>calculate_median(df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="266">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>69.0</code></pre>
 </div>
 </div>
 <p>Portanto, a mediana é de <strong>69,0 anos</strong>.</p>
 <p>A biblioteca <code>pandas</code> permite obter os valores dos quantis desejados de forma prática utilizando o método <code>quantile()</code>, como é mostrado abaixo.</p>
-<div class="cell" data-execution_count="226">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].quantile(<span class="fl">0.25</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="226">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>63.949999999999996</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="268">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].quantile(<span class="fl">0.50</span>) <span class="co"># median</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="268">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>69.0</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="269">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>].quantile(<span class="fl">0.75</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="269">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>73.25</code></pre>
 </div>
 </div>
 <p>Alguns dos parâmetros da amostra podem ser obtidos também de forma resumida e imediata com o uso do método <code>describe()</code>.</p>
-<div class="cell" data-execution_count="270">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_brazil_life_expectancy.describe()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="270">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 
 
@@ -921,7 +923,7 @@ COV = \dfrac{s}{\bar{x}}
 <h4 data-number="1.3.1" class="anchored" data-anchor-id="box-plot"><span class="header-section-number">1.3.1</span> Box plot</h4>
 <p>O <em>box plot</em> é uma representação gráfica que utiliza os quartis e os valores mínimo e máximo para representar a distribuição de dados quantitativos.</p>
 <p>Para a amostra que estamos trabalhando, um <em>box plot</em> é apresentado na <a href="#fig-box-plot">Figura&nbsp;1</a>. Na construção desse e de outros gráficos neste trabalho, a biblioteca utilizada foi a <a href="https://seaborn.pydata.org/">Seaborn</a>.</p>
-<div class="cell" data-execution_count="271">
+<div class="cell" data-execution_count="92">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -933,7 +935,7 @@ COV = \dfrac{s}{\bar{x}}
 <div id="fig-box-plot" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-box-plot-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;1: Box plot da expectativa de vida no Brasil</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;1: Box plot da expectativa de vida no Brasil.</figcaption>
 </figure>
 </div>
 </div>
@@ -943,7 +945,7 @@ COV = \dfrac{s}{\bar{x}}
 <h4 data-number="1.3.2" class="anchored" data-anchor-id="violin-plot"><span class="header-section-number">1.3.2</span> Violin plot</h4>
 <p>O <em>violin plot</em> é uma junção do <em>box plot</em> com um gráfico chamado <em>kernel density plot</em> e é frequentemente utilizado para visualizar a distribuição de dados de uma amostra.</p>
 <p>Na <a href="#fig-violin-plot">Figura&nbsp;2</a> é possível observar esse gráfico para os dados em que estamos trabalhando.</p>
-<div class="cell" data-execution_count="231">
+<div class="cell" data-execution_count="93">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> sns.violinplot(x<span class="op">=</span>df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>])</span>
@@ -953,7 +955,7 @@ COV = \dfrac{s}{\bar{x}}
 <div id="fig-violin-plot" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-violin-plot-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;2: Violin plot da expectativa de vida no Brasil</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;2: Violin plot da expectativa de vida no Brasil.</figcaption>
 </figure>
 </div>
 </div>
@@ -961,23 +963,23 @@ COV = \dfrac{s}{\bar{x}}
 </section>
 <section id="histograma-de-ocorrências" class="level4" data-number="1.3.3">
 <h4 data-number="1.3.3" class="anchored" data-anchor-id="histograma-de-ocorrências"><span class="header-section-number">1.3.3</span> Histograma de ocorrências</h4>
-<p>Para calcular a quantidade de intervalos (<span class="math inline">\(k\)</span>) para o histograma, podemos utilizar a fórmula de Sturges (<a href="#eq-sturges">Equação&nbsp;5</a>)</p>
+<p>Como temos uma amostra de tamanho maior do que 30 valores, para calcular a quantidade de intervalos (<span class="math inline">\(k\)</span>) para o histograma, podemos utilizar a fórmula de Sturges (<a href="#eq-sturges">Equação&nbsp;5</a>).</p>
 <p><span id="eq-sturges"><span class="math display">\[
 k = \log_{2} \left ( n \right ) + 1
 \tag{5}\]</span></span></p>
 <p>em que <span class="math inline">\(n\)</span> é o tamanho da amostra. Logo, utilizando a biblioteca <a href="https://numpy.org/">NumPy</a> para calcular o logaritmo, obtemos:</p>
-<div class="cell" data-execution_count="232">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> np.log2(<span class="bu">len</span>(df_brazil_life_expectancy)) <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>k</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="232">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>6.643856189774724</code></pre>
 </div>
 </div>
 <p>Adotaremos então 7 intervalos para construirmos os histogramas dos dados.</p>
 <p>Um histograma de ocorrências dos dados é apresentado na <a href="#fig-hist-ocorrencias">Figura&nbsp;3</a>.</p>
-<div class="cell" data-execution_count="272">
+<div class="cell" data-execution_count="91">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>N_BINS <span class="op">=</span> <span class="dv">7</span></span>
@@ -990,7 +992,7 @@ k = \log_{2} \left ( n \right ) + 1
 <div id="fig-hist-ocorrencias" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-hist-ocorrencias-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;3: Histograma de ocorrências da expectativa de vida no Brasil</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;3: Histograma de ocorrências da expectativa de vida no Brasil.</figcaption>
 </figure>
 </div>
 </div>
@@ -999,7 +1001,7 @@ k = \log_{2} \left ( n \right ) + 1
 <section id="histograma-de-frequências-relativas" class="level4" data-number="1.3.4">
 <h4 data-number="1.3.4" class="anchored" data-anchor-id="histograma-de-frequências-relativas"><span class="header-section-number">1.3.4</span> Histograma de frequências relativas</h4>
 <p>Um histograma de frequências relativas é apresentado na <a href="#fig-hist-frelativas">Figura&nbsp;4</a>.</p>
-<div class="cell" data-execution_count="273">
+<div class="cell" data-execution_count="94">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> sns.histplot(data<span class="op">=</span>df_brazil_life_expectancy, x<span class="op">=</span><span class="st">"Brazil Life Expectancy"</span>, bins<span class="op">=</span>N_BINS, stat<span class="op">=</span><span class="st">"probability"</span>)</span>
@@ -1010,7 +1012,7 @@ k = \log_{2} \left ( n \right ) + 1
 <div id="fig-hist-frelativas" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-hist-frelativas-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;4: Histograma de frequências relativas da expectativa de vida no Brasil</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;4: Histograma de frequências relativas da expectativa de vida no Brasil.</figcaption>
 </figure>
 </div>
 </div>
@@ -1019,7 +1021,7 @@ k = \log_{2} \left ( n \right ) + 1
 <section id="histograma-de-densidade-de-probabilidade" class="level4" data-number="1.3.5">
 <h4 data-number="1.3.5" class="anchored" data-anchor-id="histograma-de-densidade-de-probabilidade"><span class="header-section-number">1.3.5</span> Histograma de densidade de probabilidade</h4>
 <p>Um histograma de densidade de probabilidade é apresentado na <a href="#fig-hist-density-prob">Figura&nbsp;5</a>.</p>
-<div class="cell" data-execution_count="274">
+<div class="cell" data-execution_count="95">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> sns.histplot(data<span class="op">=</span>df_brazil_life_expectancy, x<span class="op">=</span><span class="st">"Brazil Life Expectancy"</span>, bins<span class="op">=</span>N_BINS, stat<span class="op">=</span><span class="st">"density"</span>)</span>
@@ -1030,7 +1032,7 @@ k = \log_{2} \left ( n \right ) + 1
 <div id="fig-hist-density-prob" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-hist-density-prob-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;5: Histograma de densidade de probabilidade da expectativa de vida no Brasil</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;5: Histograma de densidade de probabilidade da expectativa de vida no Brasil.</figcaption>
 </figure>
 </div>
 </div>
@@ -1039,7 +1041,7 @@ k = \log_{2} \left ( n \right ) + 1
 <section id="histograma-cumulativo-das-observações" class="level4" data-number="1.3.6">
 <h4 data-number="1.3.6" class="anchored" data-anchor-id="histograma-cumulativo-das-observações"><span class="header-section-number">1.3.6</span> Histograma cumulativo das observações</h4>
 <p>Um histograma cumulativo das observações é apresentado na <a href="#fig-hist-cumulativo-obs">Figura&nbsp;6</a>.</p>
-<div class="cell" data-execution_count="373">
+<div class="cell" data-execution_count="96">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> sns.ecdfplot(data<span class="op">=</span>df_brazil_life_expectancy, x<span class="op">=</span><span class="st">"Brazil Life Expectancy"</span>)</span>
@@ -1052,7 +1054,7 @@ k = \log_{2} \left ( n \right ) + 1
 <div id="fig-hist-cumulativo-obs" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-hist-cumulativo-obs-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;6: Histograma cumulativo das observações da expectativa de vida no Brasil</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;6: Histograma cumulativo das observações da expectativa de vida no Brasil.</figcaption>
 </figure>
 </div>
 </div>
@@ -1064,7 +1066,7 @@ k = \log_{2} \left ( n \right ) + 1
 <h2 data-number="2" class="anchored" data-anchor-id="item-b"><span class="header-section-number">2</span> Item b)</h2>
 <p>Para implementar o teste de Kolmogorov-Smirnov, precisaremos da função de distribuição acumulada empírica (<span class="math inline">\(ECDF\)</span>) dos dados trabalhados.</p>
 <p>Para obtê-la, iremos fazer uso da biblioteca <a href="https://scipy.org/">SciPy</a>, que possui um módulo com diversas funções estatísticas. No trecho de código abaixo, é feita a implementação para obter a função de distribuição acumulada empírica.</p>
-<div class="cell" data-execution_count="283">
+<div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> ss</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>ECDF <span class="op">=</span> ss.ecdf(df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>]).cdf</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1076,7 +1078,7 @@ ks = \max \left \{ \left | ECDF_{i} - F_{X}(x_{i}) \right | \right \}
 \tag{6}\]</span></span></p>
 <p>No trecho de código abaixo são apresentadas funções que automatizam os cálculos para o teste de Kolmogorov-Smirnov e a geração de gráficos comparativos das funções de distribuição acumulada.</p>
 <p>Para realizar a composição de gráficos, a biblioteca <a href="https://matplotlib.org/">Matplotlib</a> foi utilizada.</p>
-<div class="cell" data-execution_count="367">
+<div class="cell" data-execution_count="103">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1099,16 +1101,16 @@ ks = \max \left \{ \left | ECDF_{i} - F_{X}(x_{i}) \right | \right \}
 <span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ks_test_value, x_ks_test</span>
 <span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_ks_test(ecdf, distribution, loc, scale, x_ks_value, ks_test_value, save<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>    x_plot <span class="op">=</span> np.linspace(</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>        distribution.ppf(<span class="fl">0.001</span>, loc<span class="op">=</span>loc, scale<span class="op">=</span>scale),</span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>        distribution.ppf(<span class="fl">0.999</span>, loc<span class="op">=</span>loc, scale<span class="op">=</span>scale),</span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1000</span>,</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>    ax.plot(</span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>        x_plot, distribution.cdf(x_plot, loc<span class="op">=</span>loc, scale<span class="op">=</span>scale), label<span class="op">=</span><span class="st">"CDF"</span></span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_ks_test(</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    ecdf, distribution, loc, scale, x_ks_value, ks_test_value, save<span class="op">=</span><span class="va">False</span>, xytext<span class="op">=</span><span class="va">None</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    x_plot <span class="op">=</span> np.linspace(</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>        distribution.ppf(<span class="fl">0.001</span>, loc<span class="op">=</span>loc, scale<span class="op">=</span>scale),</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>        distribution.ppf(<span class="fl">0.999</span>, loc<span class="op">=</span>loc, scale<span class="op">=</span>scale),</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1000</span>,</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_plot, distribution.cdf(x_plot, loc<span class="op">=</span>loc, scale<span class="op">=</span>scale), label<span class="op">=</span><span class="st">"CDF"</span>)</span>
 <span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>    ecdf.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"ECDF (Empírica)"</span>)</span>
 <span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>    ax.plot(</span>
 <span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>        [x_ks_value, x_ks_value],</span>
@@ -1124,51 +1126,63 @@ ks = \max \left \{ \left | ECDF_{i} - F_{X}(x_{i}) \right | \right \}
 <span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>    ax.annotate(</span>
 <span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"ks = </span><span class="sc">{</span>ks_test_value<span class="sc">:.5f}</span><span class="ss">"</span>,</span>
 <span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>        (x_ks_value, ecdf.evaluate(x_ks_value) <span class="op">+</span> <span class="fl">0.05</span>),</span>
-<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>        xytext<span class="op">=</span>(x_ks_value <span class="op">+</span> <span class="dv">1</span>, ecdf.evaluate(x_ks_value) <span class="op">+</span> <span class="fl">0.05</span>),</span>
-<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, color<span class="op">=</span><span class="st">"gray"</span>, alpha<span class="op">=</span><span class="fl">0.15</span>)</span>
-<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> save:</span>
-<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>        fig.savefig(<span class="st">"ks-test.pdf"</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>        xytext<span class="op">=</span>(x_ks_value <span class="op">+</span> <span class="dv">1</span>, ecdf.evaluate(x_ks_value) <span class="op">+</span> <span class="fl">0.05</span>)</span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> xytext <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> xytext,</span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, color<span class="op">=</span><span class="st">"gray"</span>, alpha<span class="op">=</span><span class="fl">0.15</span>)</span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> save:</span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a>        fig.savefig(<span class="st">"ks-test.pdf"</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="modelo-gaussiano" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="modelo-gaussiano"><span class="header-section-number">2.1</span> Modelo Gaussiano</h3>
-<p>Para o modelo Gaussiano, as estimativas de <span class="math inline">\(E(X)\)</span> e de <span class="math inline">\(Var(X)\)</span> são a média amostral (<span class="math inline">\(\bar{x}\)</span>) e variância amostral (<span class="math inline">\(s^{2}\)</span>). Os parâmetros <code>loc</code> e <code>scale</code> utilizados para essa distribuição são, portanto, a média amostral e desvio padrão amostral.</p>
+<p>Para o modelo Gaussiano, as estimativas de <span class="math inline">\(E(X)\)</span> e de <span class="math inline">\(Var(X)\)</span> são a média amostral (<span class="math inline">\(\bar{x}\)</span>) e variância amostral (<span class="math inline">\(s^{2}\)</span>). Os parâmetros <code>loc</code> e <code>scale</code> utilizados para essa distribuição são a média amostral e desvio padrão amostral.</p>
 <p>O trecho de código para efetuar os cálculos do teste de Kolmogorov-Smirnov é apresentado abaixo.</p>
-<div class="cell" data-execution_count="375">
+<div class="cell" data-execution_count="97">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ks_test_value_gauss, x_ks_test_gauss <span class="op">=</span> calculate_ks_test(</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>], ECDF, ss.norm, mean, standard_deviation</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>ks_test_value_gauss, x_ks_test_gauss</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="375">
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>],</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    ECDF,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    ss.norm,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    mean,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    standard_deviation,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>ks_test_value_gauss, x_ks_test_gauss</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="97">
 <pre><code>(0.10636323684719218, 71.1999289999156)</code></pre>
 </div>
 </div>
 <p>Portanto, o valor do teste de Kolmogorov-Smirnov obtido pela implementação desenvolvida foi <strong>0,10636</strong> e foi encontrado para o valor de <strong>71,2 anos</strong>.</p>
 <p>Na <a href="#fig-ks-gauss">Figura&nbsp;7</a> é apresentada uma representação gráfica do teste, com a indicação do valor obtido e posição no gráfico.</p>
-<div class="cell" data-execution_count="374">
+<div class="cell" data-execution_count="109">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>plot_ks_test(ECDF, ss.norm, mean, standard_deviation, x_ks_test_gauss, ks_test_value_gauss)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>plot_ks_test(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    ECDF, ss.norm, mean, standard_deviation, x_ks_test_gauss, ks_test_value_gauss</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-ks-gauss" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="q1_files/figure-html/fig-ks-gauss-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figura&nbsp;7: Teste de Kolmogorov-Smirnov para a distribuição normal</figcaption>
+<figcaption class="figure-caption">Figura&nbsp;7: Teste de Kolmogorov-Smirnov para a distribuição normal.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Para validar o resultado obtido, foi realizado no trecho de código abaixo o teste de Kolmogorov-Smirnov por meio da função <code>kstest</code> da biblioteca <a href="https://scipy.org/">SciPy</a>.</p>
-<div class="cell" data-execution_count="378">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ks_res_gauss <span class="op">=</span> ss.kstest(df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>], <span class="st">"norm"</span>, args<span class="op">=</span>(mean, standard_deviation))</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>ks_res_gauss</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="378">
+<div class="cell" data-execution_count="99">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ks_res_gauss <span class="op">=</span> ss.kstest(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>],</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"norm"</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(mean, standard_deviation),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>ks_res_gauss</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="99">
 <pre><code>KstestResult(statistic=0.10636754772067303, pvalue=0.5863628686773552, statistic_location=71.2, statistic_sign=-1)</code></pre>
 </div>
 </div>
 <p>Na tabela abaixo é apresentado um resumo dos resultados.</p>
-<div class="cell" data-execution_count="381">
+<div class="cell" data-execution_count="27">
 <details>
 <summary>Código</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df_ks_gauss <span class="op">=</span> pd.DataFrame(</span>
@@ -1180,7 +1194,7 @@ ks = \max \left \{ \left | ECDF_{i} - F_{X}(x_{i}) \right | \right \}
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>df_ks_gauss.index <span class="op">=</span> [<span class="st">"Manual"</span>, <span class="st">"Scipy"</span>]</span>
 <span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>df_ks_gauss</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="381">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <div>
 
 
@@ -1210,22 +1224,247 @@ ks = \max \left \{ \left | ECDF_{i} - F_{X}(x_{i}) \right | \right \}
 </div>
 </div>
 <p>Portanto, nota-se que o resultado obtido pela implementação apresentada foi muito próximo do resultado da função <code>kstest</code>.</p>
-<div class="cell" data-execution_count="372">
+</section>
+<section id="distribuição-de-gumbel-inclinada-para-a-esquerda" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="distribuição-de-gumbel-inclinada-para-a-esquerda"><span class="header-section-number">2.2</span> Distribuição de Gumbel (inclinada para a esquerda)</h3>
+<p>Para obter os parâmetros <code>loc</code> e <code>scale</code> para essa distribuição, utilizaremos o método <code>fit()</code>.</p>
+<div class="cell" data-execution_count="100">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>loc_gumbel_l, scale_gumbel_l <span class="op">=</span> ss.gumbel_l.fit(</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>]</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>loc_gumbel_l, scale_gumbel_l</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="100">
+<pre><code>(70.79722473205372, 4.545126232797063)</code></pre>
+</div>
+</div>
+<p>Tendo os parâmetros, utilizaremos nossa função para calcular o valor do teste de Kolmogorov-Smirnov.</p>
+<div class="cell" data-execution_count="101">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ks_test_value_gumbel_l, x_ks_test_gumbel_l <span class="op">=</span> calculate_ks_test(</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>],</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    ECDF,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    ss.gumbel_l,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    loc_gumbel_l,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    scale_gumbel_l,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>ks_test_value_gumbel_l, x_ks_test_gumbel_l</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="101">
+<pre><code>(0.09432013451387156, 64.60004899995455)</code></pre>
+</div>
+</div>
+<p>Portanto, o valor da estatística KS para essa distribuição foi <strong>0,09432</strong> para o valor de <strong>64,6 anos</strong>.</p>
+<p>Na <a href="#fig-ks-gumbel-l">Figura&nbsp;8</a> s é apresentada uma representação gráfica do teste, com a indicação do valor obtido e posição no gráfico.</p>
+<div class="cell" data-execution_count="108">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ss.ksone.ppf(<span class="dv">1</span><span class="op">-</span><span class="fl">0.05</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">50</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>plot_ks_test(</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    ECDF,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    ss.gumbel_l,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    loc_gumbel_l,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    scale_gumbel_l,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    x_ks_test_gumbel_l,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    ks_test_value_gumbel_l,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    xytext<span class="op">=</span>(x_ks_test_gumbel_l <span class="op">+</span> <span class="fl">1.5</span>, ECDF.evaluate(x_ks_test_gumbel_l) <span class="op">-</span> <span class="fl">0.05</span>),</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="372">
+<div class="cell-output cell-output-display">
+<div id="fig-ks-gumbel-l" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="q1_files/figure-html/fig-ks-gumbel-l-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figura&nbsp;8: Teste de Kolmogorov-Smirnov para a distribuição Gumbel à esquerda.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Novamente, para validação, utilizaremos a função <code>kstest</code>:</p>
+<div class="cell" data-execution_count="107">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ks_res_gumbel_l <span class="op">=</span> ss.kstest(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    df_brazil_life_expectancy[<span class="st">"Brazil Life Expectancy"</span>],</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gumbel_l"</span>,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(loc_gumbel_l, scale_gumbel_l),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>ks_res_gumbel_l</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="107">
+<pre><code>KstestResult(statistic=0.09432226961248374, pvalue=0.7297138491145043, statistic_location=64.6, statistic_sign=1)</code></pre>
+</div>
+</div>
+<p>A tabela abaixo contém o resumo dos resultados.</p>
+<div class="cell" data-execution_count="84">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>df_ks_gumbel_l <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"ks"</span>: ks_test_value_gumbel_l, <span class="st">"Location"</span>: x_ks_test_gumbel_l},</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"ks"</span>: ks_res_gumbel_l.statistic,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Location"</span>: ks_res_gumbel_l.statistic_location,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>df_ks_gumbel_l.index <span class="op">=</span> [<span class="st">"Manual"</span>, <span class="st">"Scipy"</span>]</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>df_ks_gumbel_l</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="84">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ks</th>
+<th data-quarto-table-cell-role="th">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Manual</td>
+<td>0.094320</td>
+<td>64.600049</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Scipy</td>
+<td>0.094322</td>
+<td>64.600000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Novamente percebe-se que o resultado obtido pela implementação apresentada foi muito próximo do resultado da função <code>kstest</code>.</p>
+</section>
+<section id="teste-de-hipótese" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="teste-de-hipótese"><span class="header-section-number">2.3</span> Teste de hipótese</h3>
+<p>Para obter o valor de KS crítico, utilizaremos a função <code>ksone</code> e adotaremos o nível de significância (<span class="math inline">\(\alpha\)</span>) de <strong>5%</strong>.</p>
+<div class="cell" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>ks_critical <span class="op">=</span> ss.ksone.ppf(<span class="dv">1</span> <span class="op">-</span> alpha <span class="op">/</span> <span class="dv">2</span>, <span class="bu">len</span>(df_brazil_life_expectancy))</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>ks_critical</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="86">
 <pre><code>0.18840676151343094</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="370">
+<p>Na tabela abaixo comparamos os valores da estatística KS obtidos com o crítico.</p>
+<div class="cell" data-execution_count="88">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.38</span><span class="op">/</span>np.sqrt(<span class="dv">50</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df_ks_comparison <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    [ks_test_value_gauss, ks_test_value_gumbel_l, ks_critical],</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"Gaussiano"</span>, <span class="st">"Gumbel_l"</span>, <span class="st">"Crítico"</span>],</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span>[<span class="st">"ks"</span>],</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>df_ks_comparison</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="370">
-<pre><code>0.1951614716074871</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="88">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Gaussiano</td>
+<td>0.106363</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Gumbel_l</td>
+<td>0.094320</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Crítico</td>
+<td>0.188407</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Portanto, houve aderência para os dois modelos testados.</p>
+<p>Na <a href="#fig-cdfs">Figura&nbsp;9</a> e <a href="#fig-pdfs">Figura&nbsp;10</a> são apresentados os gráficos das CDFs e PDFs das distribuições analisadas, respectivamente.</p>
+<div class="cell" data-execution_count="110">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>x_plot <span class="op">=</span> np.linspace(</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    ss.gumbel_l.ppf(<span class="fl">0.001</span>, loc<span class="op">=</span>loc_gumbel_l, scale<span class="op">=</span>scale_gumbel_l),</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ss.gumbel_l.ppf(0.999, loc=loc_gumbel_l, scale=scale_gumbel_l),</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">96</span>,</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span>,</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>ax.plot(</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    x_plot,</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>    ss.norm.cdf(x_plot, loc<span class="op">=</span>mean, scale<span class="op">=</span>standard_deviation),</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"CDF Gaussiana"</span>,</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>ax.plot(</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>    x_plot,</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>    ss.gumbel_l.cdf(x_plot, loc<span class="op">=</span>loc_gumbel_l, scale<span class="op">=</span>scale_gumbel_l),</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"CDF Gumbel_l"</span>,</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"#2ca02c"</span>,</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>ECDF.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"ECDF (Empírica)"</span>)</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Expectativa de vida (anos)"</span>)</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Função cumulativa"</span>)</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"best"</span>)</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>, color<span class="op">=</span><span class="st">"gray"</span>, alpha<span class="op">=</span><span class="fl">0.15</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-cdfs" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="q1_files/figure-html/fig-cdfs-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figura&nbsp;9: CDFs das distribuições testadas e CDF empírica da expectativa de vida no Brasil.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="111">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>x_plot <span class="op">=</span> np.linspace(</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    ss.gumbel_l.ppf(<span class="fl">0.001</span>, loc<span class="op">=</span>loc_gumbel_l, scale<span class="op">=</span>scale_gumbel_l),</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ss.gumbel_l.ppf(0.999, loc=loc_gumbel_l, scale=scale_gumbel_l),</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">96</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span>,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>ax.plot(</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    x_plot,</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    ss.norm.pdf(x_plot, loc<span class="op">=</span>mean, scale<span class="op">=</span>standard_deviation),</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"PDF Gaussiana"</span>,</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>ax.plot(</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    x_plot,</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    ss.gumbel_l.pdf(x_plot, loc<span class="op">=</span>loc_gumbel_l, scale<span class="op">=</span>scale_gumbel_l),</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"PDF Gumbel_l"</span>,</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"#2ca02c"</span>,</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>sns.histplot(</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df_brazil_life_expectancy,</span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"Brazil Life Expectancy"</span>,</span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span>N_BINS,</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>    stat<span class="op">=</span><span class="st">"density"</span>,</span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Histograma de dens. de prob."</span>,</span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Expectativa de vida (anos)"</span>)</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Função densidade de probabilidade"</span>)</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"best"</span>)</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>, color<span class="op">=</span><span class="st">"gray"</span>, alpha<span class="op">=</span><span class="fl">0.15</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-pdfs" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="q1_files/figure-html/fig-pdfs-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figura&nbsp;10: PDFs das distribuições testadas e histograma de densidade de probabilidade da expectativa de vida no Brasil.</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </section>
